@@ -315,8 +315,12 @@ function renderCard(p) {
   const root = document.getElementById('pcard');
   root.style.setProperty('--acc', p.acc);
   root.innerHTML = `
-    <div class="avatar" style="background:${p.avBg};color:${p.avFg}">${p.ini}</div>
-    <div class="handle">${p.handle}</div>
+    <a href="${p.tg}" target="_blank" rel="noopener" style="text-decoration:none">
+      <div class="avatar" style="background:${p.avBg};color:${p.avFg};cursor:pointer;transition:opacity .2s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">${p.ini}</div>
+    </a>
+    <a href="${p.tg}" target="_blank" rel="noopener" style="text-decoration:none">
+      <div class="handle" style="cursor:pointer;transition:color .2s" onmouseover="this.style.color='${p.acc}'" onmouseout="this.style.color=''">${p.handle}</div>
+    </a>
     <div class="badge">зубное кунг-фу: ${p.kf}<br><span style="font-size:10px;opacity:0.8;letter-spacing:0.05em">стоимость программы: ${p.price}</span></div>
     <div class="name">${p.emoji} ${p.name}</div>
     <div class="desc">${p.desc}</div>
