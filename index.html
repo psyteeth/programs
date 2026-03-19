@@ -309,7 +309,7 @@ const P = [
 ];
 
 const LABELS = Object.keys(P[0].s);
-let cur = 3, chart = null;
+let cur = Math.floor(Math.random() * 4), chart = null;
 
 function renderCard(p) {
   const root = document.getElementById('pcard');
