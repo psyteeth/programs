@@ -1,104 +1,385 @@
-
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Зубное Кунг-фу — Профили тренеров</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;900&family=Geologica:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-.wrap{padding:1rem 0}
-.tabs{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
-.tab{padding:6px 16px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-size:13px;transition:all .2s}
-.tab.active{border-color:var(--acc);color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent);font-weight:500}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:20px;align-items:start}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem}
-.rc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;display:flex;flex-direction:column;align-items:center}
-.lbl{font-size:11px;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.kf{font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:0.5px solid var(--acc);color:var(--acc);background:color-mix(in srgb,var(--acc) 8%,transparent);display:inline-block;margin-bottom:12px}
-.sty{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px}
-.dsc{font-size:13px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:16px}
-.sec{font-size:11px;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;margin:14px 0 6px}
-.bars{display:flex;flex-direction:column;gap:8px}
-.br{display:flex;align-items:center;gap:8px}
-.bn{font-size:12px;color:var(--color-text-secondary);width:96px;flex-shrink:0}
-.bt{flex:1;height:3px;background:var(--color-background-secondary);border-radius:2px}
-.bf{height:3px;border-radius:2px}
-.bv{font-size:12px;color:var(--color-text-primary);width:22px;text-align:right}
-.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;margin-bottom:12px}
-.rl{font-size:11px;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;align-self:flex-start}
-.rh{font-size:12px;color:var(--color-text-tertiary);margin-top:12px}
-</style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<div class="wrap">
-  <div class="tabs" id="tabs"></div>
-  <div class="grid">
-    <div class="card" id="pcard"></div>
-    <div class="rc">
-      <div class="rl">Профиль триады</div>
-      <div style="position:relative;width:240px;height:240px"><canvas id="rc"></canvas></div>
-      <div class="rh" id="rh"></div>
+body {
+  background: #f5f3ef;
+  color: #1a1a18;
+  font-family: 'Geologica', sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+  padding: 60px 24px 80px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+header h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(20px, 4vw, 36px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  color: #1a1a18;
+}
+
+header p {
+  font-size: 13px;
+  color: #9a9790;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 20px;
+  border-radius: 40px;
+  border: 1.5px solid #e0ddd6;
+  background: transparent;
+  color: #9a9790;
+  cursor: pointer;
+  font-family: 'Geologica', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all .2s ease;
+  outline: none;
+}
+
+.tab:hover { border-color: #aaa; color: #1a1a18; }
+
+.tab.active {
+  border-color: var(--acc);
+  color: var(--acc);
+  background: color-mix(in srgb, var(--acc) 8%, transparent);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.layout {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e8e4dc;
+  border-radius: 20px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--acc);
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.handle {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b0ada5;
+  margin-bottom: 8px;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 40px;
+  border: 1px solid var(--acc);
+  color: var(--acc);
+  background: color-mix(in srgb, var(--acc) 8%, transparent);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(17px, 2.5vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+  line-height: 1.2;
+  color: #1a1a18;
+}
+
+.desc {
+  font-size: 14px;
+  color: #7a776e;
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c8c5bd;
+  margin-bottom: 14px;
+}
+
+.bars { display: flex; flex-direction: column; gap: 10px; }
+
+.bar-row { display: flex; align-items: center; gap: 12px; }
+
+.bar-name {
+  font-size: 13px;
+  color: #9a9790;
+  width: 115px;
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 3px;
+  background: #edeae4;
+  border-radius: 2px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width .5s ease;
+}
+
+.bar-val {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a18;
+  width: 30px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.radar-card {
+  background: #ffffff;
+  border: 1px solid #e8e4dc;
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.radar-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c8c5bd;
+  margin-bottom: 24px;
+  align-self: flex-start;
+}
+
+.radar-wrap {
+  width: 100%;
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+.radar-handle {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #c0bdb5;
+  letter-spacing: 0.06em;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Зубное Кунг-фу</h1>
+  <p>Тёмная и светлая триада · Профили тренеров</p>
+</header>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="layout">
+  <div class="card" id="pcard"></div>
+  <div class="radar-card">
+    <div class="radar-label">Профиль триады</div>
+    <div class="radar-wrap">
+      <canvas id="radar"></canvas>
     </div>
+    <div class="radar-handle" id="rhandle"></div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 const P = [
-  { h:"@Tatyana_Dynnikova", full:"Таня Дынникова", acc:"#534AB7", bg:"#EEEDFE", fg:"#3C3489", ini:"ТД",
-    sty:"Добрая опора", kf:"ясли", emo:"⚖️",
-    dsc:"Высокое долженствование с низкой тёмной триадой. Не давит, не манипулирует — просто искренне уверена, что так надо. Первая точка входа: к ней приходят, когда ещё страшно и не готово к жёсткой работе.",
-    s:{"Манипуляции":1.4,"Нарциссизм":2.7,"Психопатия":1.7,"Вера в людей":3.5,"Гуманизм":4.0,"Долженствование":4.0} },
-  { h:"@kazakovaw", full:"Гульназ Казакова", acc:"#1D9E75", bg:"#E1F5EE", fg:"#085041", ini:"ГК",
-    sty:"Архитектор Влияния", kf:"холодный расчёт", emo:"🕸️",
-    dsc:"Макиавеллизм 3.7 без лишней сентиментальности. Видит игру там, где другие видят разговор. Чувствует рычаги влияния интуитивно — даже не замечая этого. Опасна не агрессией, а паузой.",
-    s:{"Манипуляции":3.7,"Нарциссизм":2.4,"Психопатия":2.4,"Вера в людей":2.5,"Гуманизм":2.8,"Долженствование":3.0} },
-  { h:"@YanaPanchenk0", full:"Яна Панченко", acc:"#993556", bg:"#FBEAF0", fg:"#72243E", ini:"ЯП",
-    sty:"Нарцисс с Душой", kf:"позволь себе", emo:"🌹",
-    dsc:"Нарциссизм + высокий гуманизм + свобода от долга. Яркая, самодостаточная — и при этом искренне любит людей. Хочет блистать и всем помочь одновременно. Это не противоречие — это суперсила.",
-    s:{"Манипуляции":2.3,"Нарциссизм":3.0,"Психопатия":3.1,"Вера в людей":3.0,"Гуманизм":4.5,"Долженствование":2.5} },
-  { h:"@happinessguy", full:"Антон Казаков", acc:"#BA7517", bg:"#FAEEDA", fg:"#633806", ini:"АК",
-    sty:"Главный психопат", kf:"бесславные психопаты", emo:"⚡",
-    dsc:"Главный психопат группы — с высокой верой в людей и гуманизмом. Не избегает страха — просто не заражается им. Стыд не останавливает, вина не парализует. Идеальный провокатор: видит маску, не ловит тревогу за ней.",
-    s:{"Манипуляции":2.7,"Нарциссизм":2.7,"Психопатия":3.8,"Вера в людей":4.0,"Гуманизм":4.3,"Долженствование":3.5} }
+  {
+    handle: "@Tatyana_Dynnikova",
+    full: "Таня Дынникова",
+    acc: "#534AB7", avBg: "#EEEDFE", avFg: "#3C3489", ini: "ТД",
+    name: "Добрая опора", kf: "ясли", emoji: "⚖️",
+    desc: "Высокое долженствование с низкой тёмной триадой. Не давит, не манипулирует — просто искренне уверена, что так надо. Первая точка входа: к ней приходят, когда ещё страшно и не готово к жёсткой работе.",
+    s: {"Манипуляции":1.4,"Нарциссизм":2.7,"Психопатия":1.7,"Вера в людей":3.5,"Гуманизм":4.0,"Долженствование":4.0}
+  },
+  {
+    handle: "@kazakovaw",
+    full: "Гульназ Казакова",
+    acc: "#1D9E75", avBg: "#E1F5EE", avFg: "#085041", ini: "ГК",
+    name: "Архитектор Влияния", kf: "холодный расчёт", emoji: "🕸️",
+    desc: "Макиавеллизм 3.7 без лишней сентиментальности. Видит игру там, где другие видят разговор. Чувствует рычаги влияния интуитивно — даже не замечая этого. Опасна не агрессией, а паузой.",
+    s: {"Манипуляции":3.7,"Нарциссизм":2.4,"Психопатия":2.4,"Вера в людей":2.5,"Гуманизм":2.8,"Долженствование":3.0}
+  },
+  {
+    handle: "@YanaPanchenk0",
+    full: "Яна Панченко",
+    acc: "#993556", avBg: "#FBEAF0", avFg: "#72243E", ini: "ЯП",
+    name: "Нарцисс с Душой", kf: "позволь себе", emoji: "🌹",
+    desc: "Нарциссизм + высокий гуманизм + свобода от долга. Яркая, самодостаточная — и при этом искренне любит людей. Хочет блистать и всем помочь одновременно. Это не противоречие — это суперсила.",
+    s: {"Манипуляции":2.3,"Нарциссизм":3.0,"Психопатия":3.1,"Вера в людей":3.0,"Гуманизм":4.5,"Долженствование":2.5}
+  },
+  {
+    handle: "@happinessguy",
+    full: "Антон Казаков",
+    acc: "#BA7517", avBg: "#FAEEDA", avFg: "#633806", ini: "АК",
+    name: "Главный психопат", kf: "бесславные психопаты", emoji: "⚡",
+    desc: "Главный психопат группы — с высокой верой в людей и гуманизмом. Не избегает страха — просто не заражается им. Стыд не останавливает, вина не парализует. Идеальный провокатор: видит маску, не ловит тревогу за ней.",
+    s: {"Манипуляции":2.7,"Нарциссизм":2.7,"Психопатия":3.8,"Вера в людей":4.0,"Гуманизм":4.3,"Долженствование":3.5}
+  }
 ];
-const L = Object.keys(P[0].s);
-let cur=3, ch=null;
 
-function card(p){
-  document.getElementById('pcard').innerHTML=`
-    <div class="av" style="background:${p.bg};color:${p.fg}">${p.ini}</div>
-    <div class="lbl">${p.h}</div>
-    <div class="kf">зубное кунг-фу: ${p.kf}</div>
-    <div style="font-size:16px;margin-bottom:8px">${p.emo} <span class="sty" style="display:inline">${p.sty}</span></div>
-    <div class="dsc">${p.dsc}</div>
-    <div class="sec">Показатели</div>
-    <div class="bars">${L.map(l=>`<div class="br">
-      <span class="bn">${l}</span>
-      <div class="bt"><div class="bf" style="width:${(p.s[l]/5)*100}%;background:${p.acc}"></div></div>
-      <span class="bv">${p.s[l]}</span>
-    </div>`).join('')}</div>`;
+const LABELS = Object.keys(P[0].s);
+let cur = 3, chart = null;
+
+function renderCard(p) {
+  const root = document.getElementById('pcard');
+  root.style.setProperty('--acc', p.acc);
+  root.innerHTML = `
+    <div class="avatar" style="background:${p.avBg};color:${p.avFg}">${p.ini}</div>
+    <div class="handle">${p.handle}</div>
+    <div class="badge">зубное кунг-фу: ${p.kf}</div>
+    <div class="name">${p.emoji} ${p.name}</div>
+    <div class="desc">${p.desc}</div>
+    <div class="section-label">Показатели</div>
+    <div class="bars">
+      ${LABELS.map(l => `
+        <div class="bar-row">
+          <span class="bar-name">${l}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${(p.s[l]/5)*100}%;background:${p.acc}"></div></div>
+          <span class="bar-val">${p.s[l]}</span>
+        </div>`).join('')}
+    </div>`;
 }
 
-function radar(p){
-  const ctx=document.getElementById('rc').getContext('2d');
-  if(ch) ch.destroy();
-  ch=new Chart(ctx,{
-    type:'radar',
-    data:{labels:L,datasets:[{data:L.map(l=>p.s[l]),backgroundColor:p.acc+'20',borderColor:p.acc,borderWidth:2,pointBackgroundColor:p.acc,pointRadius:3}]},
-    options:{responsive:false,plugins:{legend:{display:false}},
-      scales:{r:{min:0,max:5,ticks:{display:false},grid:{color:'rgba(128,128,128,0.12)'},angleLines:{color:'rgba(128,128,128,0.12)'},pointLabels:{font:{size:10},color:'#888780'}}}}
+function renderRadar(p) {
+  const ctx = document.getElementById('radar').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: LABELS,
+      datasets: [{
+        data: LABELS.map(l => p.s[l]),
+        backgroundColor: p.acc + '18',
+        borderColor: p.acc,
+        borderWidth: 2,
+        pointBackgroundColor: p.acc,
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 1.5,
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      layout: { padding: 10 },
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          min: 0, max: 5,
+          ticks: { display: false, stepSize: 1 },
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          angleLines: { color: 'rgba(0,0,0,0.06)' },
+          pointLabels: {
+            font: { size: 12, family: "'Geologica', sans-serif" },
+            color: '#9a9790',
+            padding: 8
+          }
+        }
+      }
+    }
   });
-  document.getElementById('rh').textContent=p.h;
+  document.getElementById('rhandle').textContent = p.handle;
 }
 
-function sel(i){
-  cur=i;
-  document.documentElement.style.setProperty('--acc',P[i].acc);
-  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));
-  card(P[i]); radar(P[i]);
+function select(i) {
+  cur = i;
+  document.querySelectorAll('.tab').forEach((t, j) => {
+    t.classList.toggle('active', j === i);
+    t.style.setProperty('--acc', P[j].acc);
+  });
+  renderCard(P[i]);
+  renderRadar(P[i]);
 }
 
-const tb=document.getElementById('tabs');
-P.forEach((p,i)=>{
-  const b=document.createElement('button');
-  b.className='tab'+(i===cur?' active':'');
-  b.innerHTML=`<span style="font-size:14px">${p.emo}</span> ${p.full.split(' ')[0]}`;
-  b.onclick=()=>sel(i);
-  tb.appendChild(b);
+const tabsEl = document.getElementById('tabs');
+P.forEach((p, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab' + (i === cur ? ' active' : '');
+  btn.style.setProperty('--acc', p.acc);
+  btn.innerHTML = `<span class="dot" style="background:${p.acc}"></span>${p.full.split(' ')[0]}`;
+  btn.onclick = () => select(i);
+  tabsEl.appendChild(btn);
 });
-sel(cur);
+
+select(cur);
 </script>
+</body>
+</html>
