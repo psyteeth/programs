@@ -84,7 +84,7 @@ header p {
   max-width: 960px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr 380px;
   gap: 24px;
   align-items: start;
 }
@@ -210,7 +210,7 @@ header p {
   background: #ffffff;
   border: 1px solid #e8e4dc;
   border-radius: 20px;
-  padding: 32px;
+  padding: 28px 20px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -221,21 +221,30 @@ header p {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #c8c5bd;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   align-self: flex-start;
 }
 
 .radar-wrap {
   width: 100%;
   position: relative;
-  aspect-ratio: 1 / 1;
+}
+
+.radar-wrap canvas {
+  display: block;
 }
 
 .radar-handle {
-  margin-top: 20px;
+  margin-top: 16px;
   font-size: 12px;
   color: #c0bdb5;
   letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.radar-handle:hover {
+  color: var(--acc);
 }
 </style>
 </head>
@@ -255,7 +264,7 @@ header p {
     <div class="radar-wrap">
       <canvas id="radar"></canvas>
     </div>
-    <div class="radar-handle" id="rhandle"></div>
+    <a class="radar-handle" id="rhandle" target="_blank" rel="noopener"></a>
   </div>
 </div>
 
@@ -263,35 +272,39 @@ header p {
 const P = [
   {
     handle: "@Tatyana_Dynnikova",
+    tg: "https://t.me/Tatyana_Dynnikova",
     full: "Таня Дынникова",
     acc: "#534AB7", avBg: "#EEEDFE", avFg: "#3C3489", ini: "ТД",
     name: "Добрая опора", kf: "ясли", emoji: "⚖️",
     desc: "Высокое долженствование с низкой тёмной триадой. Не давит, не манипулирует — просто искренне уверена, что так надо. Первая точка входа: к ней приходят, когда ещё страшно и не готово к жёсткой работе.",
-    s: {"Манипуляции":1.4,"Нарциссизм":2.7,"Психопатия":1.7,"Вера в людей":3.5,"Гуманизм":4.0,"Долженствование":4.0}
+    s: {"Манипуляции":1.4,"Нарциссизм":2.7,"Психопатия":1.7,"Вера в людей":3.5,"Гуманизм":4.0,"Забота":4.0}
   },
   {
     handle: "@kazakovaw",
+    tg: "https://t.me/kazakovaw",
     full: "Гульназ Казакова",
     acc: "#1D9E75", avBg: "#E1F5EE", avFg: "#085041", ini: "ГК",
     name: "Архитектор Влияния", kf: "холодный расчёт", emoji: "🕸️",
     desc: "Макиавеллизм 3.7 без лишней сентиментальности. Видит игру там, где другие видят разговор. Чувствует рычаги влияния интуитивно — даже не замечая этого. Опасна не агрессией, а паузой.",
-    s: {"Манипуляции":3.7,"Нарциссизм":2.4,"Психопатия":2.4,"Вера в людей":2.5,"Гуманизм":2.8,"Долженствование":3.0}
+    s: {"Манипуляции":3.7,"Нарциссизм":2.4,"Психопатия":2.4,"Вера в людей":2.5,"Гуманизм":2.8,"Забота":3.0}
   },
   {
     handle: "@YanaPanchenk0",
+    tg: "https://t.me/YanaPanchenk0",
     full: "Яна Панченко",
     acc: "#993556", avBg: "#FBEAF0", avFg: "#72243E", ini: "ЯП",
     name: "Нарцисс с Душой", kf: "позволь себе", emoji: "🌹",
     desc: "Нарциссизм + высокий гуманизм + свобода от долга. Яркая, самодостаточная — и при этом искренне любит людей. Хочет блистать и всем помочь одновременно. Это не противоречие — это суперсила.",
-    s: {"Манипуляции":2.3,"Нарциссизм":3.0,"Психопатия":3.1,"Вера в людей":3.0,"Гуманизм":4.5,"Долженствование":2.5}
+    s: {"Манипуляции":2.3,"Нарциссизм":3.0,"Психопатия":3.1,"Вера в людей":3.0,"Гуманизм":4.5,"Забота":2.5}
   },
   {
     handle: "@happinessguy",
+    tg: "https://t.me/happinessguy",
     full: "Антон Казаков",
     acc: "#BA7517", avBg: "#FAEEDA", avFg: "#633806", ini: "АК",
     name: "Главный психопат", kf: "бесславные психопаты", emoji: "⚡",
     desc: "Главный психопат группы — с высокой верой в людей и гуманизмом. Не избегает страха — просто не заражается им. Стыд не останавливает, вина не парализует. Идеальный провокатор: видит маску, не ловит тревогу за ней.",
-    s: {"Манипуляции":2.7,"Нарциссизм":2.7,"Психопатия":3.8,"Вера в людей":4.0,"Гуманизм":4.3,"Долженствование":3.5}
+    s: {"Манипуляции":2.7,"Нарциссизм":2.7,"Психопатия":3.8,"Вера в людей":4.0,"Гуманизм":4.3,"Забота":3.5}
   }
 ];
 
@@ -319,8 +332,15 @@ function renderCard(p) {
 }
 
 function renderRadar(p) {
-  const ctx = document.getElementById('radar').getContext('2d');
+  const canvas = document.getElementById('radar');
+  const wrap = canvas.parentElement;
+  const size = wrap.offsetWidth || 340;
+  canvas.width = size;
+  canvas.height = size;
+
+  const ctx = canvas.getContext('2d');
   if (chart) chart.destroy();
+
   chart = new Chart(ctx, {
     type: 'radar',
     data: {
@@ -337,9 +357,8 @@ function renderRadar(p) {
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      layout: { padding: 10 },
+      responsive: false,
+      layout: { padding: { top: 20, bottom: 20, left: 20, right: 20 } },
       plugins: { legend: { display: false } },
       scales: {
         r: {
@@ -348,15 +367,19 @@ function renderRadar(p) {
           grid: { color: 'rgba(0,0,0,0.06)' },
           angleLines: { color: 'rgba(0,0,0,0.06)' },
           pointLabels: {
-            font: { size: 12, family: "'Geologica', sans-serif" },
+            font: { size: 11, family: "'Geologica', sans-serif" },
             color: '#9a9790',
-            padding: 8
+            padding: 12
           }
         }
       }
     }
   });
-  document.getElementById('rhandle').textContent = p.handle;
+
+  const rh = document.getElementById('rhandle');
+  rh.textContent = p.handle;
+  rh.href = p.tg;
+  document.querySelector('.radar-card').style.setProperty('--acc', p.acc);
 }
 
 function select(i) {
@@ -380,6 +403,8 @@ P.forEach((p, i) => {
 });
 
 select(cur);
+
+window.addEventListener('resize', () => renderRadar(P[cur]));
 </script>
 </body>
 </html>
