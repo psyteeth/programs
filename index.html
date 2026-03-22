@@ -91,6 +91,8 @@ header p {
 
 @media (max-width: 720px) {
   .layout { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr !important; }
+  .work-grid { grid-template-columns: 1fr !important; }
 }
 
 .card {
@@ -275,8 +277,8 @@ const P = [
     tg: "https://t.me/Tatyana_Dynnikova",
     full: "Таня Дынникова",
     acc: "#534AB7", avBg: "#EEEDFE", avFg: "#3C3489", ini: "ТД",
-    name: "Добрая опора", kf: "ясли", price: "от 32 000 ₽/мес", emoji: "🤗",
-    desc: "Высокая забота с низкой тёмной триадой. Не давит, не манипулирует — просто искренне уверена, что так надо. Первая точка входа: к ней приходят, когда ещё страшно и не готово к жёсткой работе.",
+    name: "Добрая опора", kf: "ясли", price: "от 32 000 ₽/месяц", emoji: "⚖️",
+    desc: "Высокое долженствование с низкой тёмной триадой. Не давит, не манипулирует — просто искренне уверена, что так надо. Первая точка входа: к ней приходят, когда ещё страшно и не готово к жёсткой работе.",
     s: {"Манипуляции":1.4,"Нарциссизм":2.7,"Психопатия":1.7,"Вера в людей":3.5,"Гуманизм":4.0,"Забота":4.0}
   },
   {
@@ -284,8 +286,8 @@ const P = [
     tg: "https://t.me/kazakovaw",
     full: "Гульназ Казакова",
     acc: "#1D9E75", avBg: "#E1F5EE", avFg: "#085041", ini: "ГК",
-    name: "Архитектор Влияния", kf: "в близость", price: "от 32 000 ₽/мес", emoji: "😘",
-    desc: "Макиавеллизм без лишней сентиментальности. Видит все манипуляции насквозь. Раскладывает все по полочкам. Ее темы: секс, отношения, близость. Любит притворяться училкой и ржать.",
+    name: "Архитектор Влияния", kf: "в близость", price: "от 32 000 ₽/месяц", emoji: "🕸️",
+    desc: "Макиавеллизм без лишней сентиментальности. Видит все манипуляции насквозь. Раскладывает все по полочкам. Её темы: секс, отношения, близость. Любит притворяться училкой и ржать.",
     s: {"Манипуляции":3.7,"Нарциссизм":2.4,"Психопатия":2.4,"Вера в людей":2.5,"Гуманизм":2.8,"Забота":3.0}
   },
   {
@@ -293,8 +295,8 @@ const P = [
     tg: "https://t.me/YanaPanchenk0",
     full: "Яна Панченко",
     acc: "#993556", avBg: "#FBEAF0", avFg: "#72243E", ini: "ЯП",
-    name: "Нарцисс с Душой", kf: "позволь себе", price: "от 32 000 ₽/мес", emoji: "🌹",
-    desc: "Нарциссизм + высокий гуманизм + беззаботность. Яркая, самодостаточная — и при этом искренне любит людей. Хочет блистать и всем помочь одновременно. Это не противоречие — это суперсила.",
+    name: "Нарцисс с Душой", kf: "позволь себе", price: "от 32 000 ₽/месяц", emoji: "🌹",
+    desc: "Нарциссизм + высокий гуманизм + свобода от долга. Яркая, самодостаточная — и при этом искренне любит людей. Хочет блистать и всем помочь одновременно. Это не противоречие — это суперсила.",
     s: {"Манипуляции":2.3,"Нарциссизм":3.0,"Психопатия":3.1,"Вера в людей":3.0,"Гуманизм":4.5,"Забота":2.5}
   },
   {
@@ -302,7 +304,7 @@ const P = [
     tg: "https://t.me/happinessguy",
     full: "Антон Казаков",
     acc: "#BA7517", avBg: "#FAEEDA", avFg: "#633806", ini: "АК",
-    name: "Главный психопат", kf: "бесславные психопаты", price: "500 000 ₽/3 мес", emoji: "😎",
+    name: "Главный психопат", kf: "бесславные психопаты", price: "500 000 ₽ / 3 месяца", emoji: "⚡",
     desc: "Главный психопат группы — с высокой верой в людей и гуманизмом. Не избегает страха — просто не заражается им. Стыд не останавливает, вина не парализует. Идеальный провокатор: видит маску, не ловит тревогу за ней.",
     s: {"Манипуляции":2.7,"Нарциссизм":2.7,"Психопатия":3.8,"Вера в людей":4.0,"Гуманизм":4.3,"Забота":3.5}
   }
@@ -321,7 +323,7 @@ function renderCard(p) {
     <a href="${p.tg}" target="_blank" rel="noopener" style="text-decoration:none">
       <div class="handle" style="cursor:pointer;transition:color .2s" onmouseover="this.style.color='${p.acc}'" onmouseout="this.style.color=''">${p.handle}</div>
     </a>
-    <div class="badge">зубное кунг-фу: ${p.kf}<br><span style="font-size:10px;opacity:0.8;letter-spacing:0.05em">стоимость программы: ${p.price}</span></div>
+    <div class="badge">зубное кунг-фу: ${p.kf}</div>
     <div class="name">${p.emoji} ${p.name}</div>
     <div class="desc">${p.desc}</div>
     <div class="section-label">Показатели</div>
@@ -410,5 +412,82 @@ select(cur);
 
 window.addEventListener('resize', () => renderRadar(P[cur]));
 </script>
+
+<footer style="max-width:960px;margin:60px auto 0;padding:0 0 40px">
+  <div style="border-top:1px solid #e8e4dc;padding-top:48px">
+
+    <div style="background:#ffffff;border:1px solid #e8e4dc;border-radius:20px;padding:28px;margin-bottom:24px">
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#c8c5bd;margin-bottom:20px">С чем работаем</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:36px;height:36px;border-radius:10px;background:#f5f3ef;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🧠</div>
+            <div><div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:3px">Лимбическая система</div><div style="font-size:12px;color:#9a9790;line-height:1.5">через саморегуляцию</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:36px;height:36px;border-radius:10px;background:#f5f3ef;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">⚔️</div>
+            <div><div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:3px">Место в иерархии</div><div style="font-size:12px;color:#9a9790;line-height:1.5">через стычки с АЖ</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:36px;height:36px;border-radius:10px;background:#f5f3ef;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🎙️</div>
+            <div><div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:3px">Всё актуальное</div><div style="font-size:12px;color:#9a9790;line-height:1.5">через групповые эфиры</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:36px;height:36px;border-radius:10px;background:#f5f3ef;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🪞</div>
+            <div><div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:3px">Интеграция отчуждённой части личности и улучшение отношений с СП</div><div style="font-size:12px;color:#9a9790;line-height:1.5">через ресурсирующие и созидательные экспозиции</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:36px;height:36px;border-radius:10px;background:#f5f3ef;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">💀</div>
+            <div><div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:3px">Социальные маски и нарциссический коллапс</div><div style="font-size:12px;color:#9a9790;line-height:1.5">через Божественный контент</div></div>
+          </div>
+        </div>
+      </div>
+
+    <div style="background:#ffffff;border:1px solid #e8e4dc;border-radius:20px;padding:32px;position:relative;overflow:hidden;margin-bottom:24px">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#BA7517,#993556,#534AB7,#1D9E75)"></div>
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#c8c5bd;margin-bottom:20px">Стоимость абонемента</div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 18px;background:#f5f3ef;border-radius:12px">
+            <div style="flex-shrink:0">
+              <div style="font-size:12px;color:#9a9790;margin-bottom:2px">1 месяц</div>
+              <div style="font-size:11px;color:#b0ada5">Таня, Яна или Гульназ</div>
+            </div>
+            <div style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;color:#1a1a18;white-space:nowrap">35 000 ₽</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 18px;background:#f5f3ef;border-radius:12px">
+            <div style="flex-shrink:0">
+              <div style="font-size:12px;color:#9a9790;margin-bottom:2px">3 месяца</div>
+              <div style="font-size:11px;color:#b0ada5">Таня, Яна или Гульназ</div>
+            </div>
+            <div style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;color:#1a1a18;white-space:nowrap">95 000 ₽</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 18px;background:#f5f3ef;border-radius:12px">
+            <div style="flex-shrink:0">
+              <div style="font-size:12px;color:#9a9790;margin-bottom:2px">3 месяца</div>
+              <div style="font-size:11px;color:#b0ada5">⚡ Антон Казаков</div>
+            </div>
+            <div style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;color:#1a1a18;white-space:nowrap">500 000 ₽</div>
+          </div>
+        </div>
+
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#c8c5bd;margin-bottom:14px">Что входит</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:16px;flex-shrink:0">🎙️</span><div style="font-size:13px;color:#7a776e;line-height:1.5">11 групповых эфиров в неделю с разборами личных запросов</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:16px;flex-shrink:0">🧘</span><div style="font-size:13px;color:#7a776e;line-height:1.5">Медитация для самостоятельной проработки любого дискомфорта</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:16px;flex-shrink:0">🌬️</span><div style="font-size:13px;color:#7a776e;line-height:1.5">Дыхательная медитация для гармонизации нервной системы</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:16px;flex-shrink:0">🔒</span><div style="font-size:13px;color:#7a776e;line-height:1.5">Бесплатный VPN для всей семьи</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:16px;flex-shrink:0">💪</span><div style="font-size:13px;color:#7a776e;line-height:1.5">5 тренировок в неделю с персональным тренером</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:16px;flex-shrink:0">🎬</span><div style="font-size:13px;color:#7a776e;line-height:1.5">Групповые эфиры по созданию контента</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:16px;flex-shrink:0">💀</span><div style="font-size:13px;color:#7a776e;line-height:1.5">Групповые эфиры с поддержкой в проживании нарциссического коллапса</div></div>
+        </div>
+      </div>
+
+    <div style="text-align:center;margin-top:40px">
+      <a href="https://t.me/psyteeth" target="_blank" rel="noopener" style="display:inline-block;font-family:'Unbounded',sans-serif;font-size:13px;font-weight:600;color:#ffffff;background:#1a1a18;padding:14px 32px;border-radius:40px;text-decoration:none;letter-spacing:0.02em;transition:opacity .2s" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Записаться → @psyteeth</a>
+    </div>
+
+  </div>
+</footer>
+
 </body>
 </html>
